@@ -1,5 +1,4 @@
 """django_auth URL Configuration
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 Examples:
@@ -15,9 +14,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from accounts.views import index
+from accounts.views import index, logout
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', index)
+    url(r'^$', index, name="index"),
+    url(r'^accounts/logout/$', logout, name="logout")
 ]
