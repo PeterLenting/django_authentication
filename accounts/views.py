@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from accounts.forms import UserLoginForm, UserRegistrationForm
 
 
@@ -42,7 +43,6 @@ def login(request):
 
 def registration(request):
     """Render the registration page"""
-    ###  Only called on accessing the page via a URL, not from registering
     if request.user.is_authenticated:
         return redirect(reverse('index'))
         print("You are already Logged in")
@@ -56,9 +56,7 @@ def registration(request):
                                      password=request.POST['password1'])
             if user:
                 auth.login(user=user, request=request)
-                #    This is what happens if you register.  We just send a message to the screen saying that the person has registered.
                 messages.success(request, "You have successfully registered")
-                # return redirect(reverse('index'))
                 return redirect(reverse('index'))
             else:
                 messages.error(request, "Unable to register your account at this time")
@@ -66,3 +64,9 @@ def registration(request):
         registration_form = UserRegistrationForm()
     return render(request, 'registration.html', {
         "registration_form": registration_form})
+
+
+def user_profile(request):
+    """The user's profile page"""
+    user = User.objects.get(email=request.user.email)
+    return render(request, 'profile.html', {"profile": user})
